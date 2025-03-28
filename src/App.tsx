@@ -1,9 +1,9 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -13,7 +13,11 @@ const queryClient = new QueryClient({
   },
 });
 
-// Create the router
+const apolloClient = new ApolloClient({
+  uri: import.meta.env.VITE_GRAPHQL_URL,
+  cache: new InMemoryCache(),
+});
+
 const router = createRouter({
   routeTree,
   context: {
@@ -21,7 +25,6 @@ const router = createRouter({
   },
 });
 
-// Register the router instance for type safety
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
@@ -30,10 +33,12 @@ declare module "@tanstack/react-router" {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ApolloProvider>
   );
 }
 
