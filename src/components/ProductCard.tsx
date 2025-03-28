@@ -35,7 +35,7 @@ export function ProductCard({
       transition={{ duration: 0.3 }}
     >
       <Card
-        className="group relative overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300"
+        className="group relative overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 pt-0"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

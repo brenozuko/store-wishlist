@@ -1,3 +1,4 @@
+import { Loader } from "@/components/Loader";
 import { ProductCard } from "@/components/ProductCard";
 import { GET_PRODUCTS } from "@/lib/apollo/queries";
 import { Product } from "@/lib/apollo/types";
@@ -23,11 +24,7 @@ const Index = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (error) {
