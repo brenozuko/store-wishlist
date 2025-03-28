@@ -1,10 +1,10 @@
-import type { Product } from "@/lib/types";
+import { Product } from "@/lib/apollo/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface WishlistStore {
   items: Product[];
-  isInWishlist: (productId: string) => boolean;
+  isInWishlist: (productId: number) => boolean;
   toggleWishlist: (product: Product) => void;
 }
 
@@ -12,7 +12,7 @@ export const useWishlist = create<WishlistStore>()(
   persist(
     (set, get) => ({
       items: [],
-      isInWishlist: (productId: string) =>
+      isInWishlist: (productId: number) =>
         get().items.some((item) => item.id === productId),
       toggleWishlist: (product: Product) =>
         set((state) => {

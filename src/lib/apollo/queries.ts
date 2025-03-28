@@ -6,16 +6,20 @@ export const GET_PRODUCTS = gql`
       id
       title
       price
-      description
       category {
         id
         name
       }
-      images {
-        url
-      }
-      creationAt
-      updatedAt
+      images
+    }
+  }
+`;
+
+export const GET_CATEGORIES = gql`
+  query GetCategories {
+    categories {
+      id
+      name
     }
   }
 `;
