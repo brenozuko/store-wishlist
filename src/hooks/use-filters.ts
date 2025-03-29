@@ -22,7 +22,7 @@ export const useFilters = create<FiltersStore>()(
     (set) => ({
       filters: {
         category: undefined,
-        priceRange: [0, 110],
+        priceRange: [1, 110],
         sortBy: DEFAULT_SORT,
       },
       setCategory: (category) =>

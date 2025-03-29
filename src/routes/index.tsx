@@ -35,11 +35,11 @@ const Index = () => {
 
   const { minPrice, maxPrice, filteredProducts } = useMemo(() => {
     if (!data?.products?.length) {
-      return { minPrice: 0, maxPrice: 110, filteredProducts: [] };
+      return { minPrice: 1, maxPrice: 110, filteredProducts: [] };
     }
 
     const products = [...data.products];
-    const minPrice = 0;
+    const minPrice = 1;
     const maxPrice = 110;
 
     // Apply sorting
