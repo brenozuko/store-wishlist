@@ -1,5 +1,6 @@
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { ProductsList } from "@/components/ProductsList";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useFilters } from "@/hooks/use-filters";
 import { useWishlist } from "@/hooks/use-wishlist";
 import { GET_PRODUCTS } from "@/lib/apollo/queries";
@@ -83,10 +84,14 @@ const Index = () => {
       <h1 className="text-2xl sm:text-3xl font-bold mb-2">
         Find your next favorite product
       </h1>
-      <p className="text-muted-foreground mb-6 sm:mb-8">
-        Showing {filteredProducts.length} of {data?.products.length || 0}{" "}
-        products
-      </p>
+      {networkStatus === 1 || (!data && loading) ? (
+        <Skeleton className="h-6 w-48 mb-6 sm:mb-8" />
+      ) : (
+        <p className="text-muted-foreground mb-6 sm:mb-8">
+          Showing {filteredProducts.length} of {data?.products.length || 0}{" "}
+          products
+        </p>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
         <aside>
           <FilterSidebar minPrice={minPrice} maxPrice={maxPrice} />
