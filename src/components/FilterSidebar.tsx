@@ -26,7 +26,7 @@ export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
     useFilters();
 
   const handleCategoryChange = (value: string) => {
-    setCategory(value || undefined);
+    setCategory(value ? parseInt(value, 10) : undefined);
   };
 
   const handlePriceRangeChange = (value: [number, number]) => {
@@ -62,7 +62,7 @@ export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
       <div>
         <h3 className="font-medium text-lg mb-4">Categories</h3>
         <RadioGroup
-          value={filters.category ?? ""}
+          value={filters.category ? String(filters.category) : ""}
           onValueChange={handleCategoryChange}
           className="space-y-2"
         >

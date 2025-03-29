@@ -1,10 +1,8 @@
 import { FilterSidebar } from "@/components/FilterSidebar";
-import { Loader } from "@/components/Loader";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductsList } from "@/components/ProductsList";
 import { useFilters } from "@/hooks/use-filters";
 import { useWishlist } from "@/hooks/use-wishlist";
 import { GET_PRODUCTS, ProductsFilterInput } from "@/lib/apollo/queries";
-import { Product } from "@/lib/apollo/types";
 import { useQuery } from "@apollo/client";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef } from "react";
@@ -27,19 +25,21 @@ const Index = () => {
     [filters.category, filters.priceRange]
   );
 
-  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+  const { loading, error, data, networkStatus } = useQuery(GET_PRODUCTS, {
     variables: filterVariables,
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+    notifyOnNetworkStatusChange: true,
   });
 
   const { minPrice, maxPrice, filteredProducts } = useMemo(() => {
     if (!data?.products?.length) {
-      return { minPrice: 0, maxPrice: 10000, filteredProducts: [] };
+      return { minPrice: 0, maxPrice: 999, filteredProducts: [] };
     }
 
     const products = [...data.products];
-    const prices = products.map((product: Product) => product.price);
-    const minPrice = Math.floor(Math.min(...prices));
-    const maxPrice = Math.ceil(Math.max(...prices));
+    const minPrice = 0;
+    const maxPrice = 999;
 
     // Apply sorting
     switch (filters.sortBy) {
@@ -67,10 +67,6 @@ const Index = () => {
     }
   }, [data?.products, minPrice, maxPrice, setPriceRange]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -94,16 +90,12 @@ const Index = () => {
         <aside>
           <FilterSidebar minPrice={minPrice} maxPrice={maxPrice} />
         </aside>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredProducts.map((product: Product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onToggleWishlist={() => toggleWishlist(product)}
-              isInWishlist={isInWishlist(product.id)}
-            />
-          ))}
-        </div>
+        <ProductsList
+          products={filteredProducts}
+          isLoading={networkStatus === 1 || (!data && loading)}
+          onToggleWishlist={toggleWishlist}
+          isInWishlist={isInWishlist}
+        />
       </div>
     </div>
   );
