@@ -1,8 +1,18 @@
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
-  query GetProducts {
-    products {
+  query GetProducts(
+    $title: String
+    $categoryId: Float
+    $price_min: Int
+    $price_max: Int
+  ) {
+    products(
+      title: $title
+      categoryId: $categoryId
+      price_min: $price_min
+      price_max: $price_max
+    ) {
       id
       title
       price
@@ -23,3 +33,10 @@ export const GET_CATEGORIES = gql`
     }
   }
 `;
+
+export interface ProductsFilterInput {
+  title?: string;
+  categoryId?: string;
+  price_min?: number;
+  price_max?: number;
+}

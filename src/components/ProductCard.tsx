@@ -1,4 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Product } from "@/lib/apollo/types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "@tanstack/react-router";
@@ -31,6 +37,32 @@ export function ProductCard({
     }
   };
 
+  const getWishlistIcon = () => {
+    if (isInWishlist && isWishlistRoute) {
+      return isHovered ? (
+        <Trash2 className="h-6 w-6 text-gray-500 transition-all duration-300" />
+      ) : (
+        <Heart className="h-6 w-6 fill-red-500 stroke-red-500 transition-all duration-300" />
+      );
+    }
+
+    return (
+      <Heart
+        className={cn(
+          "h-6 w-6 transition-all duration-300",
+          isInWishlist
+            ? "fill-red-500 stroke-red-500"
+            : "fill-transparent stroke-gray-600 group-hover:stroke-gray-900"
+        )}
+      />
+    );
+  };
+
+  const getTooltipContent = () => {
+    if (!isInWishlist) return "Add to wishlist";
+    return "Remove from wishlist";
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -47,22 +79,12 @@ export function ProductCard({
           disabled={isLoading}
           className="absolute right-4 top-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors duration-200 cursor-pointer"
         >
-          {isInWishlist && isWishlistRoute ? (
-            isHovered ? (
-              <Trash2 className="h-6 w-6 text-red-500 transition-all duration-300" />
-            ) : (
-              <Heart className="h-6 w-6 fill-red-500 stroke-red-500 transition-all duration-300" />
-            )
-          ) : (
-            <Heart
-              className={cn(
-                "h-6 w-6 transition-all duration-300",
-                isInWishlist
-                  ? "fill-red-500 stroke-red-500"
-                  : "fill-transparent stroke-gray-600 group-hover:stroke-gray-900"
-              )}
-            />
-          )}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>{getWishlistIcon()}</TooltipTrigger>
+              <TooltipContent>{getTooltipContent()}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </button>
 
         <CardHeader className="p-0">
