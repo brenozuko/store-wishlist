@@ -9,18 +9,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { useFilters } from "@/hooks/use-filters";
 import { GET_CATEGORIES } from "@/lib/apollo/queries";
 import { Category } from "@/lib/apollo/types";
 import { useQuery } from "@apollo/client";
+import { motion } from "framer-motion";
+import { Filter } from "lucide-react";
 
 interface FilterSidebarProps {
   minPrice: number;
   maxPrice: number;
 }
 
-export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
+function FilterContent({ minPrice, maxPrice }: FilterSidebarProps) {
   const { data: categoriesData } = useQuery(GET_CATEGORIES);
   const { filters, setCategory, setPriceRange, setSortBy, resetFilters } =
     useFilters();
@@ -42,7 +51,7 @@ export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
   };
 
   return (
-    <Card className="p-6 space-y-6">
+    <div className="space-y-6">
       <div>
         <h3 className="font-medium text-lg mb-4">Sort By</h3>
         <Select value={filters.sortBy} onValueChange={handleSortChange}>
@@ -103,6 +112,48 @@ export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
       <Button variant="outline" className="w-full" onClick={handleReset}>
         Reset Filters
       </Button>
-    </Card>
+    </div>
+  );
+}
+
+export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
+  return (
+    <>
+      {/* Mobile Filter Sheet */}
+      <div className="lg:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <motion.div whileTap={{ scale: 0.98 }} className="w-full">
+              <Button variant="outline" className="w-full gap-2">
+                <Filter className="h-4 w-4" />
+                Filters
+              </Button>
+            </motion.div>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-full sm:max-w-md p-0">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2 }}
+              className="h-full flex flex-col"
+            >
+              <SheetHeader className="px-6 py-4 border-b">
+                <SheetTitle>Filters</SheetTitle>
+              </SheetHeader>
+              <div className="flex-1 overflow-y-auto px-6 py-4">
+                <FilterContent minPrice={minPrice} maxPrice={maxPrice} />
+              </div>
+            </motion.div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* Desktop Filter Sidebar */}
+      <div className="hidden lg:block">
+        <Card className="p-6">
+          <FilterContent minPrice={minPrice} maxPrice={maxPrice} />
+        </Card>
+      </div>
+    </>
   );
 }
