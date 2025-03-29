@@ -35,12 +35,12 @@ const Index = () => {
 
   const { minPrice, maxPrice, filteredProducts } = useMemo(() => {
     if (!data?.products?.length) {
-      return { minPrice: 0, maxPrice: 999, filteredProducts: [] };
+      return { minPrice: 0, maxPrice: 110, filteredProducts: [] };
     }
 
     const products = [...data.products];
     const minPrice = 0;
-    const maxPrice = 999;
+    const maxPrice = 110;
 
     // Apply sorting
     switch (filters.sortBy) {
@@ -80,8 +80,7 @@ const Index = () => {
         <Skeleton className="h-6 w-48 mb-6 sm:mb-8" />
       ) : (
         <p className="text-muted-foreground mb-6 sm:mb-8">
-          Showing {filteredProducts.length} of {data?.products.length || 0}{" "}
-          products
+          {filteredProducts.length} products
         </p>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
