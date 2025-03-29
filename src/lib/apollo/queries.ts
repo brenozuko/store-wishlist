@@ -34,9 +34,3 @@ export const GET_CATEGORIES = gql`
   }
 `;
 
-export interface ProductsFilterInput {
-  title?: string;
-  categoryId?: number;
-  price_min?: number;
-  price_max?: number;
-}

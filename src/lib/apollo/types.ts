@@ -17,3 +17,9 @@ export interface Product {
 export interface ProductsResponse {
   products: Product[];
 }
+export interface ProductsFilterInput {
+  title?: string;
+  categoryId?: number;
+  price_min?: number;
+  price_max?: number;
+}

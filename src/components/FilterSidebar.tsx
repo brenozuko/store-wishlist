@@ -46,7 +46,7 @@ export function FilterSidebar({ minPrice, maxPrice }: FilterSidebarProps) {
       <div>
         <h3 className="font-medium text-lg mb-4">Sort By</h3>
         <Select value={filters.sortBy} onValueChange={handleSortChange}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select sorting" />
           </SelectTrigger>
           <SelectContent>
