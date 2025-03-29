@@ -7,16 +7,15 @@ import { GET_PRODUCTS } from "@/lib/apollo/queries";
 import { ProductsFilterInput } from "@/lib/apollo/types";
 import { useQuery } from "@apollo/client";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/")({
   component: () => <Index />,
 });
 
 const Index = () => {
-  const { filters, setPriceRange } = useFilters();
+  const { filters } = useFilters();
   const { isInWishlist, toggleWishlist } = useWishlist();
-  const initialUpdateDone = useRef(false);
 
   const filterVariables: ProductsFilterInput = useMemo(
     () => ({
@@ -61,13 +60,6 @@ const Index = () => {
 
     return { minPrice, maxPrice, filteredProducts: products };
   }, [data?.products, filters.sortBy]);
-
-  useEffect(() => {
-    if (data?.products?.length && !initialUpdateDone.current) {
-      setPriceRange([minPrice, maxPrice]);
-      initialUpdateDone.current = true;
-    }
-  }, [data?.products, minPrice, maxPrice, setPriceRange]);
 
   if (error) {
     return (
