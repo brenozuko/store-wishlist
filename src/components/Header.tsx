@@ -14,13 +14,17 @@ export default function Header() {
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
               <ShoppingBag className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">ShopStore</span>
+              <span className="text-xl font-bold">My Wishlist</span>
             </Link>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/wishlist">
-              <Button variant="ghost" size="icon" className="relative">
-                <Heart className="h-5 w-5" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative cursor-pointer"
+              >
+                <Heart className="h-6 w-6" />
                 {wishlistCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {wishlistCount}

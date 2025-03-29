@@ -1,10 +1,10 @@
 import { Loader } from "@/components/Loader";
 import { ProductCard } from "@/components/ProductCard";
+import { useWishlist } from "@/hooks/use-wishlist";
 import { GET_PRODUCTS } from "@/lib/apollo/queries";
 import { Product } from "@/lib/apollo/types";
 import { useQuery } from "@apollo/client";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   component: () => <Index />,
@@ -12,16 +12,7 @@ export const Route = createFileRoute("/")({
 
 const Index = () => {
   const { loading, error, data } = useQuery(GET_PRODUCTS);
-  const [wishlist, setWishlist] = useState<number[]>([]);
-
-  const toggleWishlist = (productId: number) => {
-    setWishlist((prev) => {
-      if (prev.includes(productId)) {
-        return prev.filter((id) => id !== productId);
-      }
-      return [...prev, productId];
-    });
-  };
+  const { isInWishlist, toggleWishlist } = useWishlist();
 
   if (loading) {
     return <Loader />;
@@ -47,8 +38,8 @@ const Index = () => {
           <ProductCard
             key={product.id}
             product={product}
-            onToggleWishlist={toggleWishlist}
-            isInWishlist={wishlist.includes(product.id)}
+            onToggleWishlist={() => toggleWishlist(product)}
+            isInWishlist={isInWishlist(product.id)}
           />
         ))}
       </div>

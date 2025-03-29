@@ -8,7 +8,7 @@ export const Route = createFileRoute("/wishlist")({
 });
 
 const Wishlist = () => {
-  const { items } = useWishlist();
+  const { items, toggleWishlist } = useWishlist();
 
   if (items.length === 0) {
     return (
@@ -29,7 +29,7 @@ const Wishlist = () => {
           <ProductCard
             key={product.id}
             product={product}
-            onToggleWishlist={() => {}}
+            onToggleWishlist={() => toggleWishlist(product)}
             isInWishlist={true}
           />
         ))}

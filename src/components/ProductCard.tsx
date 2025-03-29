@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Product } from "@/lib/apollo/types";
 import { cn } from "@/lib/utils";
+import { useRouter } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
+import { Heart, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 interface ProductCardProps {
@@ -18,6 +19,8 @@ export function ProductCard({
 }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+  const isWishlistRoute = router.state.location.pathname === "/wishlist";
 
   const handleWishlistToggle = async () => {
     setIsLoading(true);
@@ -42,16 +45,24 @@ export function ProductCard({
         <button
           onClick={handleWishlistToggle}
           disabled={isLoading}
-          className="absolute right-4 top-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors duration-200"
+          className="absolute right-4 top-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors duration-200 cursor-pointer"
         >
-          <Heart
-            className={cn(
-              "h-6 w-6 transition-all duration-300",
-              isInWishlist
-                ? "fill-red-500 stroke-red-500"
-                : "fill-transparent stroke-gray-600 group-hover:stroke-gray-900"
-            )}
-          />
+          {isInWishlist && isWishlistRoute ? (
+            isHovered ? (
+              <Trash2 className="h-6 w-6 text-red-500 transition-all duration-300" />
+            ) : (
+              <Heart className="h-6 w-6 fill-red-500 stroke-red-500 transition-all duration-300" />
+            )
+          ) : (
+            <Heart
+              className={cn(
+                "h-6 w-6 transition-all duration-300",
+                isInWishlist
+                  ? "fill-red-500 stroke-red-500"
+                  : "fill-transparent stroke-gray-600 group-hover:stroke-gray-900"
+              )}
+            />
+          )}
         </button>
 
         <CardHeader className="p-0">
